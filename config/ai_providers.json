@@ -1,0 +1,75 @@
+{
+  "providers": {
+    "gemini": {
+      "url_pattern": "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}",
+      "auth_type": "query_param",
+      "request_format": "gemini",
+      "response_format": "gemini",
+      "headers": {
+        "Content-Type": "application/json"
+      }
+    },
+    "openai": {
+      "url_pattern": "{endpoint_url}",
+      "auth_type": "bearer",
+      "request_format": "openai",
+      "response_format": "openai",
+      "headers": {
+        "Content-Type": "application/json"
+      }
+    },
+    "nvidia": {
+      "url_pattern": "{endpoint_url}",
+      "auth_type": "bearer",
+      "request_format": "openai",
+      "response_format": "openai",
+      "headers": {
+        "Content-Type": "application/json"
+      }
+    },
+    "openrouter": {
+      "url_pattern": "{endpoint_url}",
+      "auth_type": "bearer",
+      "request_format": "openai",
+      "response_format": "openai",
+      "headers": {
+        "Content-Type": "application/json"
+      }
+    }
+  },
+  "format_converters": {
+    "openai_to_gemini": {
+      "messages": "contents",
+      "message_mapping": {
+        "content[type=text]": "parts[].text",
+        "content[type=image_url]": "parts[].inline_data"
+      }
+    },
+    "gemini_to_openai": {
+      "candidates": "choices",
+      "response_mapping": {
+        "candidates[0].content.parts[0].text": "choices[0].message.content"
+      }
+    }
+  },
+  "detection_rules": [
+    {
+      "provider": "gemini",
+      "url_contains": ["generativelanguage.googleapis.com"],
+      "model_contains": ["gemini"]
+    },
+    {
+      "provider": "openai",
+      "url_contains": ["api.openai.com"],
+      "model_contains": ["gpt"]
+    },
+    {
+      "provider": "nvidia",
+      "url_contains": ["nvidia.com", "api.nvidia"]
+    },
+    {
+      "provider": "openrouter",
+      "url_contains": ["openrouter.ai"]
+    }
+  ]
+}
